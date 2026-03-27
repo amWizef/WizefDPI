@@ -1,5 +1,5 @@
 /**
- * TCP (TTL) Connection Tracker for GoodbyeDPI
+ * TCP (TTL) Connection Tracker for WizefDPI
  *
  * Monitors SYN/ACK only, to extract the TTL value of the remote server.
  *
@@ -9,7 +9,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <math.h>
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 #include "ttltrack.h"
 #include "utils/uthash.h"
 

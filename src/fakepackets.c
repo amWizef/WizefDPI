@@ -7,7 +7,7 @@
 #include <in6addr.h>
 #include <ws2tcpip.h>
 #include "windivert.h"
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 
 struct fake_t {
     const unsigned char* data;

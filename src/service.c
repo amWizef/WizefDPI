@@ -1,9 +1,9 @@
 #include <windows.h>
 #include <stdio.h>
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 #include "service.h"
 
-#define SERVICE_NAME "GoodbyeDPI"
+#define SERVICE_NAME "WizefDPI"
 
 static SERVICE_STATUS ServiceStatus;
 static SERVICE_STATUS_HANDLE hStatus;
