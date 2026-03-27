@@ -13,6 +13,13 @@
 > Kaspersky isimli antivirüs yazılımı Rus hükümetiyle olan anlaşmasından dolayı WizefDPI'ın çalışmasına engel olmaktadır. Kaspersky isimli yazılımı kullanıyorsanız, kullandıysanız veya devre dışı halde bile olsa bilgisayarınızda bulunuyorsa lütfen tamamen kaldırın. Bunu yapmadığınız taktirde WizefDPI çok yüksek ihtimalle çalışmayacaktır. Kaspersky yerine alternatif antivirüs yazılımları tercih edebilir ya da Windows Defender kullanabilirsiniz. (Windows Defender 2025 yılı itibariyle kötü amaçlı yazılım ve siteleri engellemekte son derece yeterlidir.)
 Kaspersky'i WizefDPI ZIP dosyasının indirme işlemi sırasında devre dışı bırakmanız, indirdikten sonra dışlamalara eklemeniz veya devre dışı bırakmanız sorunu çözmeyecektir. WizefDPI'ı doğru şekilde kullanabilmek için Kaspersky isimli antivirüs yazılımından bir şekilde kurtulmalısınız.
 
+## Latest Release
+
+- **Release:** WizefDPI-Turkey v0.2.3rc3 (Latest)
+- **Tag:** `release-0.2.3rc3-turkey`
+- **Asset:** [wizefdpi-0.2.3rc3-turkey.zip (302 KB)](https://github.com/cagritaskn/WizefDPI-Turkey/releases/download/release-0.2.3rc3-turkey/wizefdpi-0.2.3rc3-turkey.zip)
+- **Full notes:** [CHANGELOG.md](./CHANGELOG.md)
+
 ## Özet​
 
 Bu proje Discord ve diğer engelli site ve uygulamalara VPN'siz ve internet hızında yavaşlama olmadan girmek için WizefDPI'ın düzenlenmiş bir versiyonudur.
