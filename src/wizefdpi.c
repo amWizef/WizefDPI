@@ -1,5 +1,5 @@
 /*
- * GoodbyeDPI — Passive DPI blocker and Active DPI circumvention utility.
+ * WizefDPI — Passive DPI blocker and Active DPI circumvention utility.
  */
 
 #include <stdio.h>
@@ -13,7 +13,7 @@
 #include <in6addr.h>
 #include <ws2tcpip.h>
 #include "windivert.h"
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 #include "utils/repl_str.h"
 #include "service.h"
 #include "dnsredir.h"
@@ -24,7 +24,7 @@
 // My mingw installation does not load inet_pton definition for some reason
 WINSOCK_API_LINKAGE INT WSAAPI inet_pton(INT Family, LPCSTR pStringBuf, PVOID pAddr);
 
-#define GOODBYEDPI_VERSION "v0.2.3rc3"
+#define WIZEFDPI_VERSION "v0.2.3rc3"
 
 // Exit with failure after waiting 20 seconds (gives user time to read error messages)
 #define die() do { sleep(20); exit(EXIT_FAILURE); } while (0)
@@ -162,6 +162,10 @@ static int running_from_service = 0;
 static int exiting = 0;
 static HANDLE filters[MAX_FILTERS];
 static int filter_num = 0;
+static const char *on_off_status(int value)
+{
+    return value ? "ON" : "OFF";
+}
 static const char http10_redirect_302[] = "HTTP/1.0 302 ";
 static const char http11_redirect_302[] = "HTTP/1.1 302 ";
 static const char http_host_find[] = "\r\nHost: ";
@@ -678,9 +682,10 @@ int main(int argc, char *argv[]) {
         filter_passive_string = strdup(FILTER_PASSIVE_STRING_TEMPLATE);
 
     printf(
-        "GoodbyeDPI " GOODBYEDPI_VERSION
+        "WizefDPI " WIZEFDPI_VERSION
         ": Passive DPI blocker and Active DPI circumvention utility\n"
-        "https://github.com/ValdikSS/GoodbyeDPI\n\n"
+        "Made by Wizef\n"
+        "https://github.com/Wizef/WizefDPI\n\n"
     );
 
     if (argc == 1) {
@@ -982,7 +987,7 @@ int main(int argc, char *argv[]) {
                 debug_exit = true;
                 break;
             default:
-                puts("Usage: goodbyedpi.exe [OPTION...]\n"
+                puts("Usage: wizefdpi.exe [OPTION...]\n"
                 " -p          block passive DPI\n"
                 " -q          block QUIC/HTTP3\n"
                 " -r          replace Host with hoSt\n"
@@ -1076,54 +1081,37 @@ int main(int argc, char *argv[]) {
             auto_ttl_max = 10;
     }
 
-    printf("Block passive: %d\n"                    /* 1 */
-           "Block QUIC/HTTP3: %d\n"                 /* 1 */
-           "Fragment HTTP: %u\n"                    /* 2 */
-           "Fragment persistent HTTP: %u\n"         /* 3 */
-           "Fragment HTTPS: %u\n"                   /* 4 */
-           "Fragment by SNI: %u\n"                  /* 5 */
-           "Native fragmentation (splitting): %d\n" /* 6 */
-           "Fragments sending in reverse: %d\n"     /* 7 */
-           "hoSt: %d\n"                             /* 8 */
-           "Host no space: %d\n"                    /* 9 */
-           "Additional space: %d\n"                 /* 10 */
-           "Mix Host: %d\n"                         /* 11 */
-           "HTTP AllPorts: %d\n"                    /* 12 */
-           "HTTP Persistent Nowait: %d\n"           /* 13 */
-           "DNS redirect: %d\n"                     /* 14 */
-           "DNSv6 redirect: %d\n"                   /* 15 */
-           "Allow missing SNI: %d\n"                /* 16 */
-           "Fake requests, TTL: %s (fixed: %hu, auto: %hu-%hu-%hu, min distance: %hu)\n"  /* 17 */
-           "Fake requests, wrong checksum: %d\n"    /* 18 */
-           "Fake requests, wrong SEQ/ACK: %d\n"     /* 19 */
-           "Fake requests, custom payloads: %d\n"   /* 20 */
-           "Fake requests, resend: %d\n"            /* 21 */
-           "Max payload size: %hu\n",               /* 22 */
-           do_passivedpi, do_block_quic,                          /* 1 */
-           (do_fragment_http ? http_fragment_size : 0),           /* 2 */
-           (do_fragment_http_persistent ? http_fragment_size : 0),/* 3 */
-           (do_fragment_https ? https_fragment_size : 0),         /* 4 */
-           do_fragment_by_sni,    /* 5 */
-           do_native_frag,        /* 6 */
-           do_reverse_frag,       /* 7 */
-           do_host,               /* 8 */
-           do_host_removespace,   /* 9 */
-           do_additional_space,   /* 10 */
-           do_host_mixedcase,     /* 11 */
-           do_http_allports,      /* 12 */
-           do_fragment_http_persistent_nowait, /* 13 */
-           do_dnsv4_redirect,                  /* 14 */
-           do_dnsv6_redirect,                  /* 15 */
-           do_allow_no_sni,                    /* 16 */
-           do_auto_ttl ? "auto" : (do_fake_packet ? "fixed" : "disabled"),  /* 17 */
-               ttl_of_fake_packet, do_auto_ttl ? auto_ttl_1 : 0, do_auto_ttl ? auto_ttl_2 : 0,
-               do_auto_ttl ? auto_ttl_max : 0, ttl_min_nhops,
-           do_wrong_chksum, /* 18 */
-           do_wrong_seq,    /* 19 */
-           fakes_count,     /* 20 */
-           fakes_resend,    /* 21 */
-           max_payload_size /* 22 */
-          );
+    puts("\n============================================");
+    puts("        WizefDPI Runtime Configuration      ");
+    puts("============================================");
+    printf("  %-34s : %s\n", "Block passive DPI", on_off_status(do_passivedpi));
+    printf("  %-34s : %s\n", "Block QUIC/HTTP3", on_off_status(do_block_quic));
+    printf("  %-34s : %u\n", "HTTP fragment size", (do_fragment_http ? http_fragment_size : 0));
+    printf("  %-34s : %u\n", "HTTP persistent fragment", (do_fragment_http_persistent ? http_fragment_size : 0));
+    printf("  %-34s : %u\n", "HTTPS fragment size", (do_fragment_https ? https_fragment_size : 0));
+    printf("  %-34s : %u\n", "Fragment by SNI", do_fragment_by_sni);
+    printf("  %-34s : %s\n", "Native fragmentation", on_off_status(do_native_frag));
+    printf("  %-34s : %s\n", "Reverse fragment order", on_off_status(do_reverse_frag));
+    printf("  %-34s : %s\n", "hoSt header case trick", on_off_status(do_host));
+    printf("  %-34s : %s\n", "Host without space", on_off_status(do_host_removespace));
+    printf("  %-34s : %s\n", "Additional space trick", on_off_status(do_additional_space));
+    printf("  %-34s : %s\n", "Mixed host header", on_off_status(do_host_mixedcase));
+    printf("  %-34s : %s\n", "HTTP all ports", on_off_status(do_http_allports));
+    printf("  %-34s : %s\n", "HTTP persistent nowait", on_off_status(do_fragment_http_persistent_nowait));
+    printf("  %-34s : %s\n", "DNS redirect (IPv4)", on_off_status(do_dnsv4_redirect));
+    printf("  %-34s : %s\n", "DNS redirect (IPv6)", on_off_status(do_dnsv6_redirect));
+    printf("  %-34s : %s\n", "Allow missing SNI", on_off_status(do_allow_no_sni));
+    printf("  %-34s : %s (fixed: %hu, auto: %hu-%hu-%hu, min distance: %hu)\n",
+           "Fake requests TTL mode",
+           do_auto_ttl ? "auto" : (do_fake_packet ? "fixed" : "disabled"),
+           ttl_of_fake_packet, do_auto_ttl ? auto_ttl_1 : 0, do_auto_ttl ? auto_ttl_2 : 0,
+           do_auto_ttl ? auto_ttl_max : 0, ttl_min_nhops);
+    printf("  %-34s : %s\n", "Fake wrong checksum", on_off_status(do_wrong_chksum));
+    printf("  %-34s : %s\n", "Fake wrong SEQ/ACK", on_off_status(do_wrong_seq));
+    printf("  %-34s : %d\n", "Fake custom payload count", fakes_count);
+    printf("  %-34s : %d\n", "Fake resend count", fakes_resend);
+    printf("  %-34s : %hu\n", "Max payload size", max_payload_size);
+    puts("============================================");
 
     if (do_fragment_http && http_fragment_size > 2 && !do_native_frag) {
         puts("\nWARNING: HTTP fragmentation values > 2 are not fully compatible "
@@ -1140,7 +1128,7 @@ int main(int argc, char *argv[]) {
     if (max_payload_size)
         add_maxpayloadsize_str(max_payload_size);
     finalize_filter_strings();
-    puts("\nOpening filter");
+    puts("\n[+] Opening packet filter engine...");
     filter_num = 0;
 
     if (do_passivedpi) {
@@ -1179,7 +1167,8 @@ int main(int argc, char *argv[]) {
         printf("Debug Exit\n");
         exit(EXIT_SUCCESS);
     }
-    printf("Filter activated, GoodbyeDPI is now running!\n");
+    puts("[+] Filter activated successfully.");
+    puts("[+] WizefDPI is now running. Press Ctrl+C to stop.\n");
     signal(SIGINT, sigint_handler);
 
     while (1) {

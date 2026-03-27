@@ -1,0 +1,73 @@
+name: Release WizefDPI ZIP
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (example: release-0.2.3rc4-turkey)"
+        required: true
+        default: "release-0.2.3rc3-turkey"
+
+env:
+  WINDIVERT_URL: https://reqrypt.org/download/WinDivert-2.2.0-D.zip
+  WINDIVERT_NAME: WinDivert-2.2.0-D.zip
+  WINDIVERT_BASENAME: WinDivert-2.2.0-D
+  WINDIVERT_SHA256: 1d461cfdfa7ba88ebcfbb3603b71b703e9f72aba8aeff99a75ce293e6f89d2ba
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MinGW-w64 and zip
+        run: >
+          sudo rm /var/lib/man-db/auto-update &&
+          sudo DEBIAN_FRONTEND=noninteractive XZ_DEFAULTS="-T0" XZ_OPT="-T0" eatmydata
+          apt install -y --no-install-recommends gcc-mingw-w64 zip
+
+      - name: Download WinDivert from cache
+        id: windivert-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.WINDIVERT_NAME }}
+          key: ${{ env.WINDIVERT_SHA256 }}
+
+      - name: Download WinDivert from website
+        if: steps.windivert-cache.outputs.cache-hit != 'true'
+        run: >
+          wget ${{ env.WINDIVERT_URL }} &&
+          (echo ${{ env.WINDIVERT_SHA256 }} ${{ env.WINDIVERT_NAME }} | sha256sum -c)
+
+      - name: Unpack WinDivert
+        run: unzip -o ${{ env.WINDIVERT_NAME }}
+
+      - name: Compile x86_64 release binary
+        run: >
+          cd src && make clean &&
+          make CPREFIX=x86_64-w64-mingw32- BIT64=1 WINDIVERTHEADERS=../${{ env.WINDIVERT_BASENAME }}/include WINDIVERTLIBS=../${{ env.WINDIVERT_BASENAME }}/x64 -j4
+
+      - name: Build release ZIP
+        id: package
+        run: |
+          TAG="${{ github.event.inputs.tag }}"
+          VERSION="${TAG#release-}"
+          ZIP_NAME="wizefdpi-${VERSION}.zip"
+          mkdir release
+          cp src/wizefdpi.exe release/
+          cp ${{ env.WINDIVERT_BASENAME }}/x64/WinDivert.dll release/
+          cp ${{ env.WINDIVERT_BASENAME }}/x64/WinDivert64.sys release/
+          cp README.md LICENSE CHANGELOG.md REVERT.md release/
+          cd release
+          zip -r "../${ZIP_NAME}" .
+          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release + ZIP
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: WizefDPI ${{ github.event.inputs.tag }}
+          files: ${{ steps.package.outputs.zip_name }}
+          generate_release_notes: true

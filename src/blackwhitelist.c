@@ -1,5 +1,5 @@
 /*
- * Blacklist for GoodbyeDPI HTTP DPI circumvention tricks
+ * Blacklist for WizefDPI HTTP DPI circumvention tricks
  *
  * This is a simple domain hash table.
  * Domain records are added from a text file, where every
@@ -7,7 +7,7 @@
  */
 #include <windows.h>
 #include <stdio.h>
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 #include "utils/uthash.h"
 #include "utils/getline.h"
 

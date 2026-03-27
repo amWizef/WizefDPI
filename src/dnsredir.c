@@ -1,5 +1,5 @@
 /*
- * DNS UDP Connection Tracker for GoodbyeDPI
+ * DNS UDP Connection Tracker for WizefDPI
  *
  * This is a simple connection tracker for DNS UDP data.
  * It's not a proper one. The caveats as follows:
@@ -13,7 +13,7 @@
 #include <windows.h>
 #include <time.h>
 #include <stdio.h>
-#include "goodbyedpi.h"
+#include "wizefdpi.h"
 #include "dnsredir.h"
 #include "utils/uthash.h"
 
