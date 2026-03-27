@@ -7,12 +7,12 @@ body:
       value: |
         ### Carefully read all the text IN FULL. Take this seriously.
         ### Use this form only for software bug reports! The website does not open? That's likely NOT a bug, do NOT report it here! You have a question regarding the program? That's not a bug either!
-        #### If in doubt, [use NTC.party forum](https://ntc.party/c/community-software/goodbyedpi).
+        #### If in doubt, [use NTC.party forum](https://ntc.party/c/community-software/wizefdpi).
         ### Aşağıdaki metni TAMAMEN dikkatlice okuyun. Bu konuya ciddi bir şekilde yaklaşın.
         ### Bu formu yalnızca yazılım hatalarını bildirmek için kullanın! Web sitesi açılmıyor mu? Bu büyük ihtimalle bir hata değildir, buradan bildirmeyin! Programla ilgili bir sorunuz mu var? Bu da bir hata değildir!
-        #### Şüpheniz varsa, [NTC.party forumunu kullanın](https://ntc.party/c/community-software/goodbyedpi).
+        #### Şüpheniz varsa, [NTC.party forumunu kullanın](https://ntc.party/c/community-software/wizefdpi).
 
-        GoodbyeDPI does not guarantee to work with your ISP for every blocked website or at all. If GoodbyeDPI can't unblock some or any websites, this is most likely not a software bug, and you should not report it here.
+        WizefDPI does not guarantee to work with your ISP for every blocked website or at all. If WizefDPI can't unblock some or any websites, this is most likely not a software bug, and you should not report it here.
 
         Please only report software bugs, such as:
           * program crash
@@ -23,10 +23,10 @@ body:
           * other software issues
 
         Please make sure to check other opened and closed issues, it could be your bug has been reported already.
-        For questions, or if in doubt, [use NTC.party forum](https://ntc.party/c/community-software/goodbyedpi).
+        For questions, or if in doubt, [use NTC.party forum](https://ntc.party/c/community-software/wizefdpi).
 
         ### BU FORMU SADECE HATALAR İÇİN KULLANIN! Web sitesi açılmıyor mu? Bu büyük ihtimalle bir hata değildir, buradan bildirmeyin!
-        GoodbyeDPI’nin, sağlayıcınızla %100 uyumlu çalışacağını veya her engelli siteyi açacağını garanti etmez. Eğer GoodbyeDPI bazı ya da hiçbir web sitesini açamıyorsa, büyük ihtimalle bu bir yazılım hatası değildir ve bunu buradan bildirmemelisiniz.
+        WizefDPI’nin, sağlayıcınızla %100 uyumlu çalışacağını veya her engelli siteyi açacağını garanti etmez. Eğer WizefDPI bazı ya da hiçbir web sitesini açamıyorsa, büyük ihtimalle bu bir yazılım hatası değildir ve bunu buradan bildirmemelisiniz.
 
         Lütfen yalnızca yazılım hatalarını bildirin, örneğin:
           * programın çökmesi
@@ -37,7 +37,7 @@ body:
           * diğer yazılım sorunları
 
         Ayrıca, diğer açık ve kapalı sorunlara göz atın. Sorununuz daha önce bildirilmiş ya da düzeltilmiş olabilir.
-        Sorularınız veya şüpheleriniz varsa [NTC.party forumunu kullanın](https://ntc.party/c/community-software/goodbyedpi).
+        Sorularınız veya şüpheleriniz varsa [NTC.party forumunu kullanın](https://ntc.party/c/community-software/wizefdpi).
   - type: checkboxes
     id: terms
     attributes:
@@ -60,7 +60,7 @@ body:
     id: is-svc
     attributes:
       label: Running as service / Servis olarak çalıştırma
-      description: Do you use GoodbyeDPI as a Windows Service?
+      description: Do you use WizefDPI as a Windows Service?
       options:
         - I run it as a regular program / Programı normal bir şekilde çalıştırıyorum
         - I installed it as a service / Windows hizmeti olarak kurdum
